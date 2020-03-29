@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Translation>
+    <Language name="Русский" code="ru"/>
+    <Language name="English" code="en"/>
+    <Language name="Spanish" code="es"/>
+    <Language name="French" code="fr"/>
+    <Language name="Italian" code="it"/>
+    <Message
+        ru="Привет, я бот и я рад тебя приветствовать!"
+        en="Hello, I'm a bot and I'm glade to see you!"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Сейчас установленный язык русский. На какой Вы желаете изменить?"
+        en="Now the installed language is English. Which one do You want to change to?"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Вы изменили язык на русский!"
+        en="You have changed the language to English!"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="ФИО"
+        en="FIO"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Дата рождения"
+        en="Birthday"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Поздравление"
+        en="Congratulation"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Пожелания"
+        en="Desires"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Создадим дату рождения для друга"
+        en="Create friend's birthday"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="не задано"
+        en="none"
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Текущая операция была отменена."
+        en="The current operation was canceled."
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Это меню, которое расскажет что ты можешь."
+        en="This menu tell you what you can."
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="К сожалению, я не поддерживаю данное сообщения."
+        en="Unfortunately, i don't support this message."
+        es="..."
+        fr="..."
+        it="..."
+    />
+    <Message
+        ru="Введите ФИО друга"
+        en="Input friend's FIO"
+        es=""
+        fr=""
+        it=""
+    />
+    <Message
+        ru="Введите поздравление для друга"
+        en="Input friend's congratulation"
+        es=""
+        fr=""
+        it=""
+    />
+    <Message
+        ru="Введите желания друга"
+        en="Input friend's desires"
+        es=""
+        fr=""
+        it=""
+    />
+    <Message
+        ru="Введите дату рождения друга"
+        en="Input friend's birthday"
+        es=""
+        fr=""
+        it=""
+    />
+    <Message
+        ru="Создать"
+        en="Create"
+        es=""
+        fr=""
+        it=""
+    />
+    <Message
+        ru="Вы успешно добавили др друга!"
+        en="You have successfully added a friend"
+        es=""
+        fr=""
+        it=""
+    />
+</Translation>
