@@ -27,7 +27,9 @@ git push origin master
 3. запуск бота
 	heroku ps:scale worker=1 --app=arsentiev-birthday-bot 
 4. остановка бота
-	heroku ps:scale worker=0 --app=arsentiev-birthday-bot 
+	heroku ps:scale worker=0 --app=arsentiev-birthday-bot
+
+	heroku ps:scale web=1 --app=arsentiev-birthday-bot
 	
 ************************************************************
 
