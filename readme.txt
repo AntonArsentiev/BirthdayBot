@@ -1,11 +1,21 @@
 ************************************************************
 
-	GIT:
+    PROCFILE
+
+worker: python main.py
+web: python main.py
+
+************************************************************
+
+	GIT
 
 1. git clone https://github.com/AntonArsentiev/BirthdayBot.git
 2. git add .
 3. git commit -m "first commit"
 4. git push origin
+
+git remote add origin https://github.com/AntonArsentiev/BirthdayBot.git
+git push origin master
 
 ************************************************************
 
