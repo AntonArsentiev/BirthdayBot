@@ -22,15 +22,23 @@ def _main():
     logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    parse_args_namespace = parse_args()
+    # parse_args_namespace = parse_args()
 
-    postgres = Postgres(host=parse_args_namespace.postgres_host,
-                        port=parse_args_namespace.postgres_port,
-                        database=parse_args_namespace.postgres_database,
-                        user=parse_args_namespace.postgres_user,
-                        password=parse_args_namespace.postgres_password,
-                        connection_type=parse_args_namespace.postgres_type,
+    postgres = Postgres(host=commands.HOST_APP_VALUE,
+                        port=commands.PORT_APP_VALUE,
+                        database=commands.DATABASE_APP_VALUE,
+                        user=commands.USER_APP_VALUE,
+                        password=commands.PASSWORD_APP_VALUE,
+                        connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
                         logger=logger)
+
+    # postgres = Postgres(host=parse_args_namespace.postgres_host,
+    #                     port=parse_args_namespace.postgres_port,
+    #                     database=parse_args_namespace.postgres_database,
+    #                     user=parse_args_namespace.postgres_user,
+    #                     password=parse_args_namespace.postgres_password,
+    #                     connection_type=parse_args_namespace.postgres_type,
+    #                     logger=logger)
 
     if postgres.is_connected():
         logger.warning("postgres connection is established")
