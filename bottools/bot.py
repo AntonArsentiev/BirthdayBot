@@ -89,6 +89,7 @@ class Bot:
         #                                         ))
 
     def _start(self, update, context):
+        self._logger.warning("Someone wants to join my bot")
         account_id = update.effective_user[ACCOUNT_ID]
         self._status[account_id] = {LANGUAGE: EN, STATUS: NONE}
         command = self._postgres.commands().insert_account(
