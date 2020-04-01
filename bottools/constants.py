@@ -1,6 +1,6 @@
 BOT_TOKEN = "1083833826:AAHrO0D-wTS0HVbgzhbUpL632bH_B5yCiio"
 WEB_HOOK_ADDRESS = "0.0.0.0"
-WEB_HOOK_PORT = "80"
+WEB_HOOK_PORT = "8443"
 HEROKU_APP_URL = "https://arsentiev-birthday-bot.herokuapp.com/"
 
 STATUS = "status"
