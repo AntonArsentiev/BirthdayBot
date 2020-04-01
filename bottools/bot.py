@@ -9,6 +9,7 @@ from telegram import (
 # from datetime import (
 #     datetime, timedelta
 # )
+import os
 
 
 class Bot:
@@ -61,7 +62,7 @@ class Bot:
         и закомментировать 68 строку
         """
         self._updater.start_webhook(listen=WEB_HOOK_ADDRESS,
-                                    port=WEB_HOOK_PORT,
+                                    port=int(os.environ.get("PORT", WEB_HOOK_PORT)),
                                     url_path=BOT_TOKEN)
         self._updater.bot.set_webhook(HEROKU_APP_URL + BOT_TOKEN)
 
