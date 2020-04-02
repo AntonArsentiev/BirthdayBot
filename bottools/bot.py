@@ -43,18 +43,16 @@ class Bot:
             }
 
     def _set_job_queue(self):
-        pass
         # now = datetime.utcnow()
-        # to = now + timedelta(seconds=24 * 60 * 60)
+        # to = now + timedelta(seconds=2 * 60)
         # to = to.replace(hour=0, minute=0, second=0, microsecond=0)
         # self._updater.job_queue.run_repeating(self._it_is_time_for_birthday,
         #                                       interval=24 * 60 * 60,
         #                                       first=to.timestamp() - now.timestamp())
 
         # повторение каждые 2 минуты
-        # self._updater.job_queue.run_repeating(self._it_is_time_for_birthday,
-        #                                       interval=2 * 60,
-        #                                       first=15)
+        self._updater.job_queue.run_once(self._it_is_time_for_birthday,
+                                         when=35 * 60)
 
     def start_pooling(self):
         """
@@ -72,8 +70,8 @@ class Bot:
     def _it_is_time_for_birthday(self, dispatcher):
         dispatcher.bot.send_message(chat_id=513814634,
                                     text="Я завладел job_queue, бу - га - га")
-        while True:
-            print(self._status[513814634][STATUS])
+        # while True:
+        #     print(self._status[513814634][STATUS])
         # account_command = self._postgres.commands().select_account()
         # account_records = self._postgres.execute(account_command)
         # for account_record in account_records:
