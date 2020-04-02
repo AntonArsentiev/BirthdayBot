@@ -43,6 +43,7 @@ class Bot:
             }
 
     def _set_job_queue(self):
+        pass
         # now = datetime.utcnow()
         # to = now + timedelta(seconds=2 * 60)
         # to = to.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -51,16 +52,17 @@ class Bot:
         #                                       first=to.timestamp() - now.timestamp())
 
         # повторение каждые 2 минуты
-        self._updater.job_queue.run_once(self._it_is_time_for_birthday,
-                                         when=35 * 60)
+        # self._updater.job_queue.run_once(self._it_is_time_for_birthday,
+        #                                  when=35 * 60)
 
     def start_pooling(self):
         """
         при деплое на Heroku раскомментировать 62-65 строки,
         и закомментировать 68 строку
         """
+        # port = int(os.environ.get("PORT", WEB_HOOK_PORT)),
         self._updater.start_webhook(listen=WEB_HOOK_ADDRESS,
-                                    port=int(os.environ.get("PORT", WEB_HOOK_PORT)),
+                                    port=int(WEB_HOOK_PORT),
                                     url_path=BOT_TOKEN)
         self._updater.bot.set_webhook(HEROKU_APP_URL + BOT_TOKEN)
 
@@ -68,8 +70,9 @@ class Bot:
         self._updater.idle()
 
     def _it_is_time_for_birthday(self, dispatcher):
-        dispatcher.bot.send_message(chat_id=513814634,
-                                    text="Я завладел job_queue, бу - га - га")
+        pass
+        # dispatcher.bot.send_message(chat_id=513814634,
+        #                             text="Я завладел job_queue, бу - га - га")
         # while True:
         #     print(self._status[513814634][STATUS])
         # account_command = self._postgres.commands().select_account()
