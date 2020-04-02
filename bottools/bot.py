@@ -62,7 +62,7 @@ class Bot:
         """
         # port = int(os.environ.get("PORT", WEB_HOOK_PORT)),
         self._updater.start_webhook(listen=WEB_HOOK_ADDRESS,
-                                    port=int(WEB_HOOK_PORT),
+                                    port=int(os.environ.get("PORT", WEB_HOOK_PORT)),
                                     url_path=BOT_TOKEN)
         self._updater.bot.set_webhook(HEROKU_APP_URL + BOT_TOKEN)
 
