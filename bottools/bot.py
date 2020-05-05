@@ -25,7 +25,6 @@ class Bot:
         self._job_queue = JobQueue()
         self._update_queue = Queue()
         self._dispatcher = Dispatcher(self._bot, self._update_queue, use_context=True)
-        self._job_queue.set_dispatcher(self._dispatcher)
         self._translator = Translator(file=TRANSLATION_FILE)
         self._set_commands()
         self._update_status()
@@ -53,15 +52,18 @@ class Bot:
             }
 
     def _set_job_queue(self):
+        self._logger.critical("_set_job_queue", "begin")
+        self._job_queue.set_dispatcher(self._dispatcher)
         # now = datetime.utcnow()
         # to = now + timedelta(seconds=23 * 60 * 60)
         # to = to.replace(hour=0, minute=0, second=0, microsecond=0)
         self._job_queue.run_repeating(
             self._it_is_time_for_birthday,
-            interval=24 * 60 * 60,
+            interval=2 * 60,
             first=60
         )
         # to.timestamp() - now.timestamp()
+        self._logger.critical("_set_job_queue", "end")
 
 # ------------------------------------------------------------------------------------------
 #       PUBLIC METHODS
@@ -226,7 +228,7 @@ class Bot:
 # ------------------------------------------------------------------------------------------
 
     def _it_is_time_for_birthday(self, dispatcher):
-        self._logger.info("_it_is_time_for_birthday", "i am here!")
+        self._logger.critical("_it_is_time_for_birthday", "i am here!")
         account_command = self._postgres.commands().select_account()
         account_records = self._postgres.execute(account_command)
         translate = self._translator.translate
