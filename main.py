@@ -71,7 +71,7 @@ def index():
 def web_hook():
     if request.method == "POST":
         logger.info("web_hook", "something was received")
-        update = Update.de_json(request.get_json(force=True), bot)
+        update = Update.de_json(request.get_json(force=True), bot.get_bot())
         bot.get_dispatcher().process_update(update)
         bot.get_update_queue().put(update)
         return "OK"
