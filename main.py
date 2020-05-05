@@ -66,5 +66,5 @@ if __name__ == "__main__":
 
     if postgres.is_connected():
         bot = Bot(logger=logger, postgres=postgres)
-        server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
         bot.start_pooling()
+        server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
