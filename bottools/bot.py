@@ -68,7 +68,7 @@ class Bot:
         # self._updater.start_webhook(listen=WEB_HOOK_ADDRESS,
         #                             port=int(os.environ.get(HEROKU_APP_PORT, WEB_HOOK_PORT)),
         #                             url_path=BOT_TOKEN)
-        self._bot.set_webhook(HEROKU_APP_URL + BOT_TOKEN)
+        self._bot.setWebhook(HEROKU_APP_URL + BOT_TOKEN)
         # self._updater.start_polling()
         # self._updater.idle()
 
