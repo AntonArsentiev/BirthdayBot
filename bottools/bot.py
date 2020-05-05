@@ -1,7 +1,7 @@
 from translationtools.language import Translator
 from telegram.ext import (
-    Updater, CommandHandler, MessageHandler,
-    Filters, CallbackQueryHandler, Dispatcher
+    CommandHandler, MessageHandler, Filters,
+    CallbackQueryHandler, Dispatcher, JobQueue
 )
 from .constants import *
 from telegram import (
@@ -22,8 +22,10 @@ class Bot:
         self._logger = logger
         self._postgres = postgres
         self._bot = TelegramBot(token=BOT_TOKEN)
+        self._job_queue = JobQueue()
         self._update_queue = Queue()
         self._dispatcher = Dispatcher(self._bot, self._update_queue, use_context=True)
+        self._job_queue.set_dispatcher(self._dispatcher)
         self._translator = Translator(file=TRANSLATION_FILE)
         self._set_commands()
         self._update_status()
@@ -54,7 +56,7 @@ class Bot:
         # now = datetime.utcnow()
         # to = now + timedelta(seconds=23 * 60 * 60)
         # to = to.replace(hour=0, minute=0, second=0, microsecond=0)
-        self._dispatcher.job_queue.run_repeating(
+        self._job_queue.run_repeating(
             self._it_is_time_for_birthday,
             interval=24 * 60 * 60,
             first=60
@@ -66,12 +68,7 @@ class Bot:
 # ------------------------------------------------------------------------------------------
 
     def start_pooling(self):
-        # self._updater.start_webhook(listen=WEB_HOOK_ADDRESS,
-        #                             port=int(os.environ.get(HEROKU_APP_PORT, WEB_HOOK_PORT)),
-        #                             url_path=BOT_TOKEN)
         self._bot.setWebhook(HEROKU_APP_URL + BOT_TOKEN)
-        # self._updater.start_polling()
-        # self._updater.idle()
 
     def get_dispatcher(self):
         return self._dispatcher
