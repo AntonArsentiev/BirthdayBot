@@ -51,13 +51,14 @@ class Bot:
             }
 
     def _set_job_queue(self):
-        pass
         # now = datetime.utcnow()
         # to = now + timedelta(seconds=23 * 60 * 60)
         # to = to.replace(hour=0, minute=0, second=0, microsecond=0)
-        # self._updater.job_queue.run_repeating(self._it_is_time_for_birthday,
-        #                                       interval=24 * 60 * 60,
-        #                                       first=60)
+        self._dispatcher.job_queue.run_repeating(
+            self._it_is_time_for_birthday,
+            interval=24 * 60 * 60,
+            first=60
+        )
         # to.timestamp() - now.timestamp()
 
 # ------------------------------------------------------------------------------------------
@@ -228,6 +229,7 @@ class Bot:
 # ------------------------------------------------------------------------------------------
 
     def _it_is_time_for_birthday(self, dispatcher):
+        self._logger.info("_it_is_time_for_birthday", "i am here!")
         account_command = self._postgres.commands().select_account()
         account_records = self._postgres.execute(account_command)
         translate = self._translator.translate

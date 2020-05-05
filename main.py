@@ -11,48 +11,18 @@ from postgrestools.postgres import Postgres
 
 server = Flask(__name__)
 
-# logger = Logger(commands.LOGGER_APP_VALUE)
-#
-# postgres = Postgres(host=commands.HOST_APP_VALUE,
-#                     port=commands.PORT_APP_VALUE,
-#                     database=commands.DATABASE_APP_VALUE,
-#                     user=commands.USER_APP_VALUE,
-#                     password=commands.PASSWORD_APP_VALUE,
-#                     connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
-#                     logger=logger)
 
-# if postgres.is_connected():
-# bot = Bot(logger=logger, postgres=postgres)
-# bot.start_pooling()
-
-# def parse_args():
-#     parser = ArgumentParser()
-#
-#     parser.add_argument("--postgres_host", default=commands.HOST_APP_VALUE)
-#     parser.add_argument("--postgres_port", default=commands.PORT_APP_VALUE)
-#     parser.add_argument("--postgres_database", default=commands.DATABASE_APP_VALUE)
-#     parser.add_argument("--postgres_user", default=commands.USER_APP_VALUE)
-#     parser.add_argument("--postgres_password", default=commands.PASSWORD_APP_VALUE)
-#     parser.add_argument("--postgres_type", default=commands.CONNECTION_TYPE_DROP_AND_CREATE)
-#     parser.add_argument("--logger_level", default=commands.LOGGER_APP_VALUE)
-#
-#     return parser.parse_args()
-
-
-@server.route('/')
+@server.route("/")
 def index():
-    logger.info("index", "something was received")
     return HEROKU_APP_URL
 
 
-@server.route('/' + BOT_TOKEN, methods=["POST"])
+@server.route("/" + BOT_TOKEN, methods=["POST"])
 def web_hook():
-    if request.method == "POST":
-        logger.info("web_hook", "something was received")
-        update = Update.de_json(request.get_json(force=True), bot.get_bot())
-        bot.get_dispatcher().process_update(update)
-        bot.get_update_queue().put(update)
-        return "OK"
+    update = Update.de_json(request.get_json(force=True), bot.get_bot())
+    bot.get_dispatcher().process_update(update)
+    bot.get_update_queue().put(update)
+    return "OK"
 
 
 if __name__ == "__main__":
@@ -70,15 +40,20 @@ if __name__ == "__main__":
 
     logger = Logger(commands.LOGGER_APP_VALUE)
 
-    postgres = Postgres(host=commands.HOST_APP_VALUE,
-                        port=commands.PORT_APP_VALUE,
-                        database=commands.DATABASE_APP_VALUE,
-                        user=commands.USER_APP_VALUE,
-                        password=commands.PASSWORD_APP_VALUE,
-                        connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
-                        logger=logger)
+    postgres = Postgres(
+        host=commands.HOST_APP_VALUE,
+        port=commands.PORT_APP_VALUE,
+        database=commands.DATABASE_APP_VALUE,
+        user=commands.USER_APP_VALUE,
+        password=commands.PASSWORD_APP_VALUE,
+        connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
+        logger=logger
+    )
 
     if postgres.is_connected():
         bot = Bot(logger=logger, postgres=postgres)
         bot.start_pooling()
-    server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    server.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
+    )
