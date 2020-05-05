@@ -63,6 +63,7 @@ class Bot:
             first=60
         )
         # to.timestamp() - now.timestamp()
+        self._job_queue.start()
         self._logger.critical("_set_job_queue", "end")
 
 # ------------------------------------------------------------------------------------------
