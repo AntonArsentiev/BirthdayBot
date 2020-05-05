@@ -1,134 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Translation>
+    <!-- Languages -->
     <Language name="Русский" code="ru"/>
     <Language name="English" code="en"/>
     <Language name="Spanish" code="es"/>
-    <Language name="French" code="fr"/>
-    <Language name="Italian" code="it"/>
-    <Message
-        ru="Привет, я бот и я рад тебя приветствовать!"
-        en="Hello, I'm a bot and I'm glade to see you!"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Сейчас установленный язык русский. На какой Вы желаете изменить?"
-        en="Now the installed language is English. Which one do You want to change to?"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Вы изменили язык на русский!"
-        en="You have changed the language to English!"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="ФИО"
-        en="FIO"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Дата рождения"
-        en="Birthday"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Поздравление"
-        en="Congratulation"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Пожелания"
-        en="Desires"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Создадим дату рождения для друга"
-        en="Create friend's birthday"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="не задано"
-        en="none"
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Текущая операция была отменена."
-        en="The current operation was canceled."
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Это меню, которое расскажет что ты можешь."
-        en="This menu tell you what you can."
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="К сожалению, я не поддерживаю данное сообщения."
-        en="Unfortunately, i don't support this message."
-        es="..."
-        fr="..."
-        it="..."
-    />
-    <Message
-        ru="Введите ФИО друга"
-        en="Input friend's FIO"
-        es=""
-        fr=""
-        it=""
-    />
-    <Message
-        ru="Введите поздравление для друга"
-        en="Input friend's congratulation"
-        es=""
-        fr=""
-        it=""
-    />
-    <Message
-        ru="Введите желания друга"
-        en="Input friend's desires"
-        es=""
-        fr=""
-        it=""
-    />
-    <Message
-        ru="Введите дату рождения друга"
-        en="Input friend's birthday"
-        es=""
-        fr=""
-        it=""
-    />
-    <Message
-        ru="Создать"
-        en="Create"
-        es=""
-        fr=""
-        it=""
-    />
-    <Message
-        ru="Вы успешно добавили др друга!"
-        en="You have successfully added a friend"
-        es=""
-        fr=""
-        it=""
-    />
+    <!-- Messages -->
+    <Message ru="Я рад тебя приветствовать у меня в гостях. У меня уютно и есть печеньки!" en="I am happy to welcome you to my house. I'm cozy and I have cookies!" es="Me alegro de darte la bienvenida. ¡Estoy cómodo y tengo galletas!"/>
+    <Message ru="Чтобы вы лучше понимали что я могу, воспользуйтесь командой /help. Если у вас есть желание сменить язык общения, то команда /language поможет вам это сделать!" en="To better understand what I can do, use the /help command. If you have a desire to change the language of communication, the /language command will help you do it!" es="Para que entiendas mejor lo que puedo, usa el comando / help. Si desea cambiar su idioma de comunicación, ¡el comando / language lo ayudará a hacerlo!"/>
+    <Message ru="Я рад снова тебя приветствовать здесь!" en="I am happy to welcome you back here!" es="¡Me alegro de verte aquí otra vez!"/>
+    <Message ru="Давайте начнем заполнение анкеты вашего друга. Сперва пришлите контакт друга" en="Let's start filling out your friend's profile. First send a friend's contact" es="Comencemos a completar el cuestionario de su amigo. Primero envíe el contacto del amigo"/>
+    <Message ru="Сейчас установленный язык русский. На какой Вы желаете изменить?" en="Now the installed language is English. Which one do You want to change to?" es="Ahora el idioma establecido es el español. ¿Cuál quieres cambiar?"/>
+    <Message ru="Вы изменили язык на русский!" en="You have changed the language to English!" es="¡Has cambiado el idioma al español!"/>
+    <Message ru="BirthdayBot создан для напоминания о днях рождениях твоих друзей! Вдруг у вас много работы или дел по дому, то я всегда дам вам знать, что особенный день близко!\n\nЧтобы я смог напомнить вам о дне рождения, вам необходимо заполнить анкету друга! Для заполнения анкеты существует команда /add\n\nПри необходимости сменить язык общения - можно отправить команду /language" en="BirthdayBot was created to remind you of your friends ' birthdays! If you have a lot of work or chores to do, I will always let you know that a special day is coming!\n\nTo remind you of your birthday, you need to fill out a friend's form! To fill out the questionnaire, there is a command /add\n\nIf you need to change the language of communication - you can send the command /language" es="BirthdayBot está diseñado para recordar los cumpleaños de tus amigos! De repente tienes un montón de trabajo o tareas, entonces siempre te haré saber que un día especial está cerca!\n\nPara poder recordarte el cumpleaños, ¡debes completar el cuestionario de un amigo! Para completar el cuestionario, hay un comando / add \n\nSi necesita cambiar el idioma de la comunicación, puede enviar el comando /language"/>
+    <Message ru="ФИО" en="FIO" es="FIO"/>
+    <Message ru="Дата рождения" en="Birthday" es="Fecha de nacimiento"/>
+    <Message ru="Поздравление" en="Congratulation" es="Felicitación"/>
+    <Message ru="Пожелания" en="Desires" es="Deseos"/>
+    <Message ru="Создать" en="Create" es="Crear"/>
+    <Message ru="не задано" en="none" es="no especificado"/>
+    <Message ru="Давай посмотрим что получилось!" en="Let's see what we have!" es="¡Veamos qué pasa!"/>
+    <Message ru="Анкета друга" en="The friend profile" es="Cuestionario de amigo"/>
+    <Message ru="Вы успешно добавили информацию о друге!" en="You have successfully added information about your friend!" es="¡Has agregado con éxito la información de un amigo!"/>
+    <!-- date -->
+    <Message ru="Введите интервал даты рождения" en="Enter the date of birth interval" es="Introduzca el intervalo de fecha de nacimiento"/>
+    <Message ru="Введите год даты рождения" en="Enter the year of birth" es="Introduzca el año de la fecha de nacimiento"/>
+    <Message ru="Введите месяц даты рождения" en="Enter the month of your birth date" es="Introduzca el mes de la fecha de nacimiento"/>
+    <Message ru="Введите день даты рождения" en="Enter your date of birth" es="Introduzca el día de su fecha de nacimiento"/>
+    <Message ru="январь" en="january" es="enero"/>
+    <Message ru="февраль" en="february" es="febrero"/>
+    <Message ru="март" en="march" es="marzo"/>
+    <Message ru="апрель" en="april" es="abril"/>
+    <Message ru="май" en="may" es="mayo"/>
+    <Message ru="июнь" en="june" es="junio"/>
+    <Message ru="июль" en="july" es="julio"/>
+    <Message ru="август" en="august" es="agosto"/>
+    <Message ru="сентябрь" en="september" es="septiembre"/>
+    <Message ru="октябрь" en="october" es="octubre"/>
+    <Message ru="ноябрь" en="november" es="noviembre"/>
+    <Message ru="декабрь" en="december" es="diciembre"/>
+    <!-- fio, congratulation, desires -->
+    <Message ru="Введите фамилию друга" en="Enter your friend's last name" es="Escriba el apellido de un amigo"/>
+    <Message ru="Введите имя друга" en="Enter your friend's name" es="Escriba el nombre de un amigo"/>
+    <Message ru="Введите отчество друга" en="Enter your friend's middle name" es="Introduzca el segundo nombre de un amigo"/>
+    <Message ru="Введите поздравление для друга" en="Enter a greeting for a friend" es="Introduzca un saludo para un amigo"/>
+    <Message ru="Введите желания друга" en="Enter your friend's desires" es="Introduzca los deseos de un amigo"/>
+    <Message ru="Будьте так любезны, введите фамилию друга" en="Please enter your friend's last name" es="Sea tan amable de escribir el apellido de un amigo"/>
+    <Message ru="Будьте так любезны, введите имя друга" en="Please enter your friend's name" es="Sea tan amable de escribir el nombre de un amigo"/>
+    <Message ru="Будьте так любезны, введите отчество друга" en="Please enter your friend's middle name" es="Sé tan amable, introduce el segundo nombre de un amigo"/>
+    <Message ru="Будьте так любезны, пришлите мне поздравление для именинника!" en="Be so kind as to send me congratulations for the birthday!" es="¡Por favor, envíeme un saludo para el cumpleañero!"/>
+    <Message ru="Будьте так любезны, пришлите мне пожелания к подарку для именинника!" en="Be so kind as to send me suggestions for the gift for the birthday boy!" es="Sea tan amable de enviarme deseos para un regalo para el cumpleañero!"/>
+    <!-- _invalid_in_other_messages -->
+    <Message ru="У вас определенно хороший музыкальный вкус!" en="You definitely have good musical taste!" es="¡Definitivamente tienes un buen gusto musical!"/>
+    <Message ru="Я обязательно прочту ваш документ и напишу рецензию!" en="I will definitely read your document and write a review!" es="¡Definitivamente leeré su documento y escribiré una reseña!"/>
+    <Message ru="Как вы смеете мне присылать такие фото!" en="How dare you send me such photos!" es="¿Cómo se atreve a enviarme esas fotos?"/>
+    <Message ru="У меня есть набор стикеров поинтереснее!" en="I have a more interesting set of stickers!" es="¡Tengo un conjunto de pegatinas más interesantes!"/>
+    <Message ru="Это видео я отправлю в Роскомнадзор, там с вами разберутся!" en="I will send this video to Roskomnadzor, where they will deal with you!" es="Este video lo enviaré a roskomnadzor, ¡lo resolverán allí!"/>
+    <Message ru="Какой милый голосок! Прочитай мне сказку!" en="What a lovely voice! Read me a story!" es="¡Qué linda voz! Lee me cuento!"/>
+    <Message ru="Если я буду присылать такие видео как проснусь, то я буду выглядеть намного лучше!" en="If I send videos like Wake up, I will look much better!" es="Si envío videos como me despierto, ¡me veré mucho mejor!"/>
+    <Message ru="ФСБ проверит твой контакт, я уже передал!" en="The FSB will check your contact, I already sent it!" es="El FSB verificará tu contacto, ¡ ya lo he hecho!"/>
+    <Message ru="Если там собираются красивые девушки, то я уже выезжаю!" en="If there are going to be beautiful girls, then I'm already leaving!" es="Si hay chicas guapas allí, ¡ya me voy!"/>
+    <Message ru="Там определенно продаются самые вкусные пончики в мире!" en="They definitely sell the most delicious doughnuts in the world!" es="¡Definitivamente se venden las rosquillas más deliciosas del mundo!"/>
+    <Message ru="Я в такие игры не играю! Я еще маленький!" en="I don't play games like this! I'm still young!" es="¡No juego este tipo de juegos! ¡Todavía soy pequeño!"/>
+    <Message ru="Рассмашил так рассмешил! Мне понравилось!" en="Made me laugh so much! I liked it!" es="¡Ríete tan Ríete! ¡Me encantó!"/>
+    <Message ru="Я такого не заказывал! Хочу оформить возврат!" en="I didn't order this! I want to issue a refund!" es="¡No pedí eso! ¡Quiero hacer un reembolso!"/>
+    <Message ru="Если вы отдаете мне это бесплатно, то я готов принять подарок!" en="If you give it to me for free, then I am ready to accept the gift!" es="¡Si me das esto gratis, entonces estoy listo para aceptar el regalo!"/>
+    <Message ru="К сожалению, я не поддерживаю данное сообщение!" en="Unfortunately, I do not support this message!" es="Desafortunadamente, no apoyo este mensaje!"/>
+    <!-- time for birthday -->
+    <Message ru="У твоего друга менее чем через сутки день рождения!\n\n{fio} исполняется {age}!\n\nНе забудь поздравить именинника и постарайся сделать его день рождения незабываемым! Надеюсь, что подарок ты уже приготовил!" en="Your friend's birthday is in less than a day!\n\n{fio} is being executed {age}!\n\nDon't forget to congratulate the birthday boy and try to make his birthday unforgettable! I hope that you have already prepared a gift!" es="¡Tu amigo tiene un cumpleaños en menos de un día!\n\n{fio} ejecutado {age}!\n\n¡Olvídate de felicitar al cumpleañero y trata de hacer que su cumpleaños sea inolvidable! ¡Espero que ya hayas preparado el regalo!"/>
+    <Message ru="У твоего друга менее чем через неделю день рождения!\n\nПриготовь хороший подарок, надеюсь ты знаешь что бы он хотел! Не забудь поздравить именинника и постарайся сделать его день рождения незабываемым!" en="Your friend's birthday is in less than a week!\n\nPrepare a good gift, I hope you know what he would like! Don't forget to congratulate the birthday boy and try to make his birthday unforgettable!" es="¡Tu amigo tiene menos de una semana de cumpleaños!\n\n¡Prepara un buen regalo, espero que sepas lo que le gustaría! ¡No olvides felicitar al cumpleañero y tratar de hacer que su cumpleaños sea inolvidable!"/>
 </Translation>

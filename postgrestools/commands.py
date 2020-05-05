@@ -18,6 +18,7 @@ DATABASE_APP_VALUE = "telegram"
 USER_APP_VALUE = "postgres"
 PASSWORD_APP_VALUE = "qwe@123"
 TYPE_APP_VALUE = CONNECTION_TYPE_DROP_AND_CREATE
+LOGGER_APP_VALUE = "debug"
 
 # database commands
 
@@ -75,9 +76,13 @@ CREATE_BIRTHDAY_TABLE = """
         first_name character varying(64),
         middle_name character varying(64),
         last_name character varying(64),
+        phone_number character varying(64),
+        user_id bigint,
         date date,
         congratulation text,
         desires text,
+        remind7 boolean,
+        remind1 boolean,
         account_id bigint,
         CONSTRAINT birthday_id_pk PRIMARY KEY (id),
         CONSTRAINT birthday_account_id_fk FOREIGN KEY (account_id)
@@ -181,12 +186,16 @@ UPDATE_LANGUAGE = """
 """
 
 INSERT_BIRTHDAY = """
-    INSERT INTO "Birthday" (last_name, first_name, middle_name, date, congratulation, desires, account_id) 
-    VALUES ('{last_name}', '{first_name}', '{middle_name}', '{date}', '{congratulation}', '{desires}', {account_id});
+    INSERT INTO "Birthday" (last_name, first_name, middle_name, phone_number, user_id, date, congratulation, desires, remind7, remind1, account_id) 
+    VALUES ('{last_name}', '{first_name}', '{middle_name}', '{phone_number}', {user_id}, '{date}', '{congratulation}', '{desires}', '{remind7}', '{remind1}', {account_id});
 """
 
 SELECT_BIRTHDAY_FOR_ACCOUNT = """
     SELECT * FROM "Birthday" WHERE account_id = {account_id};  
+"""
+
+UPDATE_REMIND = """
+    UPDATE "Birthday" SET remind7 = '{remind7}', remind1 = '{remind1}' WHERE account_id = {account_id};
 """
 
 
@@ -230,20 +239,33 @@ class Commands:
         )
 
     @staticmethod
-    def insert_birthday(last_name, first_name, middle_name, date, congratulation, desires, account_id):
+    def insert_birthday(last_name, first_name, middle_name, phone_number, user_id, date,
+                        congratulation, desires, remind7, remind1, account_id):
         return INSERT_BIRTHDAY.format(
             last_name=last_name,
             first_name=first_name,
             middle_name=middle_name,
+            phone_number=phone_number,
+            user_id=user_id,
             date=date,
             congratulation=congratulation,
             desires=desires,
+            remind7=remind7,
+            remind1=remind1,
             account_id=account_id
         )
 
     @staticmethod
     def select_birthday_for_account(account_id):
         return SELECT_BIRTHDAY_FOR_ACCOUNT.format(
+            account_id=account_id
+        )
+
+    @staticmethod
+    def update_remind(remind7, remind1, account_id):
+        return UPDATE_REMIND.format(
+            remind7=remind7,
+            remind1=remind1,
             account_id=account_id
         )
 

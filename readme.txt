@@ -53,9 +53,8 @@ UptimeRobot
 
         TELEGRAM BOT COMMANDS
 
-add - adding your friend's birthday
-language - setting your locale
-help - menu that tell what you can
-cancel - cancel the current operation
+add - add your friend's birthday
+language - set your locale
+help - i will tell what you can do
 
 ************************************************************

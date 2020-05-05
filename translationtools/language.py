@@ -23,7 +23,7 @@ class Translator:
         return self._languages
 
     def translate(self, message, language):
-        return self._translation[message][language]
+        return self._translation[message][language].replace("\\n", "\n")
 
 
 if __name__ == "__main__":
