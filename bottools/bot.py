@@ -1,12 +1,14 @@
 from translationtools.language import Translator
 from telegram.ext import (
-    Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, Dispatcher
+    Updater, CommandHandler, MessageHandler,
+    Filters, CallbackQueryHandler, Dispatcher
 )
 from .constants import *
 from telegram import (
     InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
     ReplyKeyboardMarkup, ReplyKeyboardRemove
 )
+from telegram import Bot as TelegramBot
 from datetime import (
     datetime, timedelta
 )
@@ -19,9 +21,9 @@ class Bot:
         self._status = {}
         self._logger = logger
         self._postgres = postgres
-        self._updater = Updater(token=BOT_TOKEN, use_context=True)
+        self._bot = TelegramBot(token=BOT_TOKEN)
         self._update_queue = Queue()
-        self._dispatcher = Dispatcher(self._updater.bot, self._update_queue, use_context=True)
+        self._dispatcher = Dispatcher(self._bot, self._update_queue, use_context=True)
         self._translator = Translator(file=TRANSLATION_FILE)
         self._set_commands()
         self._update_status()
@@ -49,12 +51,13 @@ class Bot:
             }
 
     def _set_job_queue(self):
-        now = datetime.utcnow()
-        to = now + timedelta(seconds=23 * 60 * 60)
-        to = to.replace(hour=0, minute=0, second=0, microsecond=0)
-        self._updater.job_queue.run_repeating(self._it_is_time_for_birthday,
-                                              interval=24 * 60 * 60,
-                                              first=60)
+        pass
+        # now = datetime.utcnow()
+        # to = now + timedelta(seconds=23 * 60 * 60)
+        # to = to.replace(hour=0, minute=0, second=0, microsecond=0)
+        # self._updater.job_queue.run_repeating(self._it_is_time_for_birthday,
+        #                                       interval=24 * 60 * 60,
+        #                                       first=60)
         # to.timestamp() - now.timestamp()
 
 # ------------------------------------------------------------------------------------------
@@ -65,7 +68,7 @@ class Bot:
         # self._updater.start_webhook(listen=WEB_HOOK_ADDRESS,
         #                             port=int(os.environ.get(HEROKU_APP_PORT, WEB_HOOK_PORT)),
         #                             url_path=BOT_TOKEN)
-        self._updater.bot.set_webhook(HEROKU_APP_URL + BOT_TOKEN)
+        self._bot.set_webhook(HEROKU_APP_URL + BOT_TOKEN)
         # self._updater.start_polling()
         # self._updater.idle()
 
