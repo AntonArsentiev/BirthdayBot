@@ -73,7 +73,7 @@ def web_hook():
         logger.info("web_hook", "something was received")
         update = Update.de_json(request.get_json(force=True), bot)
         bot.get_dispatcher().process_update(update)
-        bot.get_update_queue().update_queue.put(update)
+        bot.get_update_queue().put(update)
         return "OK"
 
 
