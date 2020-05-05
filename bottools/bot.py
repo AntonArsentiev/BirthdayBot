@@ -76,7 +76,7 @@ class Bot:
         return self._dispatcher
 
     def get_update_queue(self):
-        return  self._update_queue
+        return self._update_queue
 
 # ------------------------------------------------------------------------------------------
 #       COMMANDS

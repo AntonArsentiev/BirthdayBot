@@ -1,19 +1,19 @@
 import os
 from flask import Flask
 from flask import request
-# from bottools.bot import Bot
+from bottools.bot import Bot
 from bottools.constants import *
 from postgrestools import commands
 # from argparse import ArgumentParser
 from loggingtools.register import Logger
 from postgrestools.postgres import Postgres
 from telegram import (
-    Update, Bot
+    Update
 )
-from telegram.ext import (
-    CommandHandler, Dispatcher
-)
-from queue import Queue
+# from telegram.ext import (
+#     CommandHandler, Dispatcher
+# )
+# from queue import Queue
 
 server = Flask(__name__)
 
@@ -28,24 +28,24 @@ postgres = Postgres(host=commands.HOST_APP_VALUE,
                     logger=logger)
 
 # if postgres.is_connected():
-#     bot = Bot(logger=logger, postgres=postgres)
-#     bot.start_pooling()
+bot = Bot(logger=logger, postgres=postgres)
+bot.start_pooling()
 
-bot = Bot(token=BOT_TOKEN)
-bot.setWebhook(HEROKU_APP_URL + BOT_TOKEN)
-update_queue = Queue()
-dp = Dispatcher(bot, update_queue, use_context=True)
+# bot = Bot(token=BOT_TOKEN)
+# bot.setWebhook(HEROKU_APP_URL + BOT_TOKEN)
+# update_queue = Queue()
+# dp = Dispatcher(bot, update_queue, use_context=True)
+#
+#
+# def start(update, context):
+#     context.bot.send_message(
+#         chat_id=update.effective_chat.id,
+#         text="_команда старт_"
+#     )
 
 
-def start(update, context):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="_команда старт_"
-    )
-
-
-start_handler = CommandHandler('start', start)
-dp.add_handler(start_handler)
+# start_handler = CommandHandler('start', start)
+# dp.add_handler(start_handler)
 
 # def parse_args():
 #     parser = ArgumentParser()
@@ -72,8 +72,8 @@ def web_hook():
     if request.method == "POST":
         logger.info("web_hook", "something was received")
         update = Update.de_json(request.get_json(force=True), bot)
-        dp.process_update(update)
-        update_queue.put(update)
+        bot.get_dispatcher().process_update(update)
+        bot.get_update_queue().update_queue.put(update)
         return "OK"
 
 
