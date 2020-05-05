@@ -11,6 +11,19 @@ from telegram import Update
 
 server = Flask(__name__)
 
+logger = Logger(commands.LOGGER_APP_VALUE)
+
+postgres = Postgres(host=commands.HOST_APP_VALUE,
+                    port=commands.PORT_APP_VALUE,
+                    database=commands.DATABASE_APP_VALUE,
+                    user=commands.USER_APP_VALUE,
+                    password=commands.PASSWORD_APP_VALUE,
+                    connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
+                    logger=logger)
+
+if postgres.is_connected():
+    bot = Bot(logger=logger, postgres=postgres)
+    bot.start_pooling()
 
 # def parse_args():
 #     parser = ArgumentParser()
@@ -54,17 +67,17 @@ if __name__ == "__main__":
     #                     connection_type=parse_args_namespace.postgres_type,
     #                     logger=logger)
 
-    logger = Logger(commands.LOGGER_APP_VALUE)
-
-    postgres = Postgres(host=commands.HOST_APP_VALUE,
-                        port=commands.PORT_APP_VALUE,
-                        database=commands.DATABASE_APP_VALUE,
-                        user=commands.USER_APP_VALUE,
-                        password=commands.PASSWORD_APP_VALUE,
-                        connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
-                        logger=logger)
-
-    if postgres.is_connected():
-        bot = Bot(logger=logger, postgres=postgres)
-        bot.start_pooling()
-        server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    # logger = Logger(commands.LOGGER_APP_VALUE)
+    #
+    # postgres = Postgres(host=commands.HOST_APP_VALUE,
+    #                     port=commands.PORT_APP_VALUE,
+    #                     database=commands.DATABASE_APP_VALUE,
+    #                     user=commands.USER_APP_VALUE,
+    #                     password=commands.PASSWORD_APP_VALUE,
+    #                     connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
+    #                     logger=logger)
+    #
+    # if postgres.is_connected():
+    #     bot = Bot(logger=logger, postgres=postgres)
+    #     bot.start_pooling()
+    server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
