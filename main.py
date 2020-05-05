@@ -28,11 +28,13 @@ server = Flask(__name__)
 
 @server.route('/')
 def index():
+    logger.info("index", "something was received")
     return HEROKU_APP_URL
 
 
 @server.route('/' + BOT_TOKEN, methods=["POST"])
 def web_hook():
+    logger.info("web_hook", "something was received")
     update = Update.de_json(request.get_json(force=True), bot)
     bot.get_dispatcher().process_update(update)
     bot.get_update_queue().put(update)
