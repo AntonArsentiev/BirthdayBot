@@ -75,4 +75,12 @@ class Postgres:
 
 
 if __name__ == "__main__":
-    pass
+    from loggingtools.register import Logger
+    logger = Logger("debug")
+    postgres = Postgres(password="qwe@123", logger=logger)
+    if postgres.is_connected():
+        command = 'SELECT * FROM "Present"'
+        result = postgres.execute(command)
+        print(result)
+    else:
+        print("postgres - connection is not established")

@@ -54,6 +54,7 @@ UptimeRobot
         TELEGRAM BOT COMMANDS
 
 add - add your friend's birthday
+friends - list all my friends
 language - set your locale
 help - i will tell what you can do
 

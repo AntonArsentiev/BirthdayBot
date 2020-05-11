@@ -1,7 +1,7 @@
 from translationtools.language import Translator
 from telegram.ext import (
     CommandHandler, MessageHandler, Filters,
-    CallbackQueryHandler, Dispatcher, JobQueue
+    CallbackQueryHandler, Dispatcher, JobQueue, Updater
 )
 from .constants import *
 from telegram import (
@@ -21,6 +21,7 @@ class Bot:
         self._status = {}
         self._logger = logger
         self._postgres = postgres
+        # self._updater = Updater(token=BOT_TOKEN, use_context=True)
         self._bot = TelegramBot(token=BOT_TOKEN)
         self._job_queue = JobQueue()
         self._update_queue = Queue()
@@ -37,40 +38,48 @@ class Bot:
     def _set_commands(self):
         self._dispatcher.add_handler(CommandHandler(START, self._start))
         self._dispatcher.add_handler(CommandHandler(ADD, self._add))
+        self._dispatcher.add_handler(CommandHandler(FRIENDS, self._friends))
         self._dispatcher.add_handler(CommandHandler(LANGUAGE, self._language))
         self._dispatcher.add_handler(CommandHandler(HELP, self._help))
         self._dispatcher.add_handler(CallbackQueryHandler(self._callback_query))
         self._dispatcher.add_handler(MessageHandler(Filters.all, self._other_messages))
+        # self._updater.dispatcher.add_handler(CommandHandler(START, self._start))
+        # self._updater.dispatcher.add_handler(CommandHandler(ADD, self._add))
+        # self._updater.dispatcher.add_handler(CommandHandler(FRIENDS, self._friends))
+        # self._updater.dispatcher.add_handler(CommandHandler(LANGUAGE, self._language))
+        # self._updater.dispatcher.add_handler(CommandHandler(HELP, self._help))
+        # self._updater.dispatcher.add_handler(CallbackQueryHandler(self._callback_query))
+        # self._updater.dispatcher.add_handler(MessageHandler(Filters.all, self._other_messages))
 
     def _update_status(self):
         command = self._postgres.commands().select_account()
         records = self._postgres.execute(command)
-        for record in records:
-            self._status[record[0]] = {
-                STATUS: NONE,
-                LANGUAGE: record[4]
-            }
+        if self._correct_postgres_answer(records):
+            for record in records:
+                self._status[record[0]] = {
+                    STATUS: NONE,
+                    LANGUAGE: record[4]
+                }
 
     def _set_job_queue(self):
-        self._logger.critical("_set_job_queue", "begin")
         self._job_queue.set_dispatcher(self._dispatcher)
-        # now = datetime.utcnow()
-        # to = now + timedelta(seconds=23 * 60 * 60)
-        # to = to.replace(hour=0, minute=0, second=0, microsecond=0)
+        now = datetime.utcnow()
+        to = now + timedelta(seconds=23 * 60 * 60)
+        to = to.replace(hour=0, minute=0, second=0, microsecond=0)
         self._job_queue.run_repeating(
             self._it_is_time_for_birthday,
-            interval=2 * 60,
-            first=60
+            interval=24 * 60 * 60,
+            first=to.timestamp() - now.timestamp()
         )
-        # to.timestamp() - now.timestamp()
         self._job_queue.start()
-        self._logger.critical("_set_job_queue", "end")
 
 # ------------------------------------------------------------------------------------------
 #       PUBLIC METHODS
 # ------------------------------------------------------------------------------------------
 
     def start_pooling(self):
+        # self._updater.start_polling()
+        # self._updater.idle()
         self._bot.setWebhook(HEROKU_APP_URL + BOT_TOKEN)
 
     def get_dispatcher(self):
@@ -88,7 +97,7 @@ class Bot:
 
     def _start(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
-        language = self._status[account_id][LANGUAGE] if self._status.get(account_id, None) else STANDART_LANGUAGE
+        language = self._status[account_id][LANGUAGE] if self._status.get(account_id, None) else STANDARD_LANGUAGE
         translate = self._translator.translate
         if account_id in self._status.keys():
             self._status[account_id][STATUS] = NONE
@@ -97,13 +106,13 @@ class Bot:
                 text=translate("Я рад снова тебя приветствовать здесь!", language)
             )
         else:
-            self._status[account_id] = {LANGUAGE: STANDART_LANGUAGE, STATUS: NONE}
+            self._status[account_id] = {LANGUAGE: STANDARD_LANGUAGE, STATUS: NONE}
             command = self._postgres.commands().insert_account(
                 account_id=account_id,
                 first_name=update.effective_user[FIRST_NAME],
                 last_name=update.effective_user[LAST_NAME],
                 user_name=update.effective_user[USERNAME],
-                language_code=STANDART_LANGUAGE
+                language_code=STANDARD_LANGUAGE
             )
             self._postgres.execute(command)
             context.bot.send_message(
@@ -141,6 +150,31 @@ class Bot:
             chat_id=update.effective_message.chat_id,
             text=translate("Давайте начнем заполнение анкеты вашего друга. Сперва пришлите контакт друга", language)
         )
+
+    def _friends(self, update, context):
+        account_id = update.effective_user[ACCOUNT_ID]
+        language = self._status[account_id][LANGUAGE]
+        translate = self._translator.translate
+        self._status[account_id][STATUS] = NONE
+
+        birthday_command = self._postgres.commands().select_birthday_for_account(account_id)
+        birthday_records = self._postgres.execute(birthday_command)
+        if self._correct_postgres_answer(birthday_records):
+            text = translate("Вот список добавленных друзей:", language) + "\n\n"
+            for birthday_record in birthday_records:
+                text += "{fio} {birthday}\n".format(
+                    fio=str(" ".join([birthday_record[3], birthday_record[1], birthday_record[2]])).strip(),
+                    birthday=birthday_record[6].strftime("%Y-%m-%d")
+                )
+            context.bot.send_message(
+                chat_id=update.message.chat_id,
+                text=text[:-1]
+            )
+        else:
+            context.bot.send_message(
+                chat_id=update.message.chat_id,
+                text=translate("Вы еще не добавили ни одного друга!", language)
+            )
 
     def _language(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -229,63 +263,68 @@ class Bot:
 # ------------------------------------------------------------------------------------------
 
     def _it_is_time_for_birthday(self, dispatcher):
-        self._logger.critical("_it_is_time_for_birthday", "i am here!")
         account_command = self._postgres.commands().select_account()
         account_records = self._postgres.execute(account_command)
         translate = self._translator.translate
-        for account_record in account_records:
-            account_id = account_record[0]
-            language = self._status[account_id][LANGUAGE]
+        if self._correct_postgres_answer(account_records):
+            for account_record in account_records:
+                account_id = account_record[0]
+                language = self._status[account_id][LANGUAGE]
 
-            birthday_command = self._postgres.commands().select_birthday_for_account(account_record[0])
-            birthday_records = self._postgres.execute(birthday_command)
-            for birthday_record in birthday_records:
-                datetime_birthday = datetime.strptime(birthday_record[6].strftime("%Y-%m-%d"), "%Y-%m-%d")
+                birthday_command = self._postgres.commands().select_birthday_for_account(account_record[0])
+                birthday_records = self._postgres.execute(birthday_command)
+                if self._correct_postgres_answer(birthday_records):
+                    for birthday_record in birthday_records:
+                        datetime_birthday = datetime.strptime(birthday_record[6].strftime("%Y-%m-%d"), "%Y-%m-%d")
 
-                birthday = {
-                    FIO: {
-                        LAST_NAME: birthday_record[1],
-                        FIRST_NAME: birthday_record[2],
-                        MIDDLE_NAME: birthday_record[3]
-                    },
-                    DATE: {
-                        YEAR: str(datetime_birthday.year),
-                        MONTH: str(datetime_birthday.month),
-                        DAY: str(datetime_birthday.day)
-                    }
-                }
-                remind7, remind1 = birthday_record[9], birthday_record[10]
-                datetime_birthday = datetime_birthday.replace(year=datetime.utcnow().year)
-                if datetime.utcnow().timestamp() > datetime_birthday.timestamp():
-                    datetime_birthday = datetime_birthday.replace(year=datetime.utcnow().year + 1)
-                if datetime_birthday.timestamp() - datetime.utcnow().timestamp() <= 24 * 60 * 60 and remind1:
-                    dispatcher.bot.send_message(
-                        chat_id=account_record[0],
-                        text=translate("У твоего друга менее чем через сутки день рождения!\\n\\n"
-                                       "{fio} исполняется {age}!\\n\\n"
-                                       "Не забудь поздравить именинника и постарайся сделать его день рождения незабываемым! "
-                                       "Надеюсь, что подарок ты уже приготовил!", language).format(
-                            fio=str(" ".join(birthday[FIO].values())).strip(),
-                            age=str(datetime.utcnow().year - int(birthday[DATE][YEAR])),
-                        )
-                    )
-                    remind7, remind1 = True, True
-                elif datetime_birthday.timestamp() - datetime.utcnow().timestamp() <= 7 * 24 * 60 * 60 and remind7:
-                    dispatcher.bot.send_message(
-                        chat_id=account_record[0],
-                        text=translate(
-                            "У твоего друга менее чем через неделю день рождения!\\n\\n"
-                            "Приготовь хороший подарок, надеюсь ты знаешь что бы он хотел! "
-                            "Не забудь поздравить именинника и постарайся "
-                            "сделать его день рождения незабываемым!", language)
-                    )
-                    remind7, remind1 = False, True
-                command = self._postgres.commands().update_remind(remind7, remind1, account_id)
-                self._postgres.execute(command)
+                        birthday = {
+                            FIO: {
+                                LAST_NAME: birthday_record[1],
+                                FIRST_NAME: birthday_record[2],
+                                MIDDLE_NAME: birthday_record[3]
+                            },
+                            DATE: {
+                                YEAR: str(datetime_birthday.year),
+                                MONTH: str(datetime_birthday.month),
+                                DAY: str(datetime_birthday.day)
+                            }
+                        }
+                        remind7, remind1 = birthday_record[9], birthday_record[10]
+                        datetime_birthday = datetime_birthday.replace(year=datetime.utcnow().year)
+                        if datetime.utcnow().timestamp() > datetime_birthday.timestamp():
+                            datetime_birthday = datetime_birthday.replace(year=datetime.utcnow().year + 1)
+                        if datetime_birthday.timestamp() - datetime.utcnow().timestamp() <= 24 * 60 * 60 and remind1:
+                            dispatcher.bot.send_message(
+                                chat_id=account_record[0],
+                                text=translate("У твоего друга менее чем через сутки день рождения!\\n\\n"
+                                               "{fio} исполняется {age}!\\n\\n"
+                                               "Не забудь поздравить именинника и постарайся сделать его день рождения незабываемым! "
+                                               "Надеюсь, что подарок ты уже приготовил!", language).format(
+                                    fio=str(" ".join(birthday[FIO].values())).strip(),
+                                    age=str(datetime.utcnow().year - int(birthday[DATE][YEAR])),
+                                )
+                            )
+                            remind7, remind1 = True, True
+                        elif datetime_birthday.timestamp() - datetime.utcnow().timestamp() <= 7 * 24 * 60 * 60 and remind7:
+                            dispatcher.bot.send_message(
+                                chat_id=account_record[0],
+                                text=translate(
+                                    "У твоего друга менее чем через неделю день рождения!\\n\\n"
+                                    "Приготовь хороший подарок, надеюсь ты знаешь что бы он хотел! "
+                                    "Не забудь поздравить именинника и постарайся "
+                                    "сделать его день рождения незабываемым!", language)
+                            )
+                            remind7, remind1 = False, True
+                        command = self._postgres.commands().update_remind(remind7, remind1, account_id)
+                        self._postgres.execute(command)
 
 # ------------------------------------------------------------------------------------------
 #       PRIVATE METHODS
 # ------------------------------------------------------------------------------------------
+
+    @staticmethod
+    def _correct_postgres_answer(answer):
+        return True if answer and len(answer) > 0 else False
 
     def _send_create_message(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]

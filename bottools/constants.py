@@ -4,6 +4,12 @@ WEB_HOOK_PORT = "8443"
 HEROKU_APP_URL = "https://arsentiev-birthday-bot.herokuapp.com/"
 HEROKU_APP_PORT = "PORT"
 
+FLASK_SERVER_ADDRESS_VALUE = "0.0.0.0"
+FLASK_SERVER_PORT = "PORT"
+FLASK_SERVER_PORT_VALUE = 5000
+METHOD_POST = "POST"
+FLASK_SERVER_OK = "OK"
+
 STATUS = "status"
 
 TRANSLATION_FILE = "translationtools/translation.xml"
@@ -19,6 +25,7 @@ CREATE = "create"
 
 START = "start"
 ADD = "add"
+FRIENDS = "friends"
 LANGUAGE = "language"
 HELP = "help"
 CANCEL = "cancel"
@@ -39,7 +46,7 @@ DAY = "day"
 RU = "ru"
 EN = "en"
 ES = "es"
-STANDART_LANGUAGE = RU
+STANDARD_LANGUAGE = RU
 
 CONTACT = "contact"
 

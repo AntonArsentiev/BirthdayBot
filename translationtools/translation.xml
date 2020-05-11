@@ -21,6 +21,8 @@
     <Message ru="Давай посмотрим что получилось!" en="Let's see what we have!" es="¡Veamos qué pasa!"/>
     <Message ru="Анкета друга" en="The friend profile" es="Cuestionario de amigo"/>
     <Message ru="Вы успешно добавили информацию о друге!" en="You have successfully added information about your friend!" es="¡Has agregado con éxito la información de un amigo!"/>
+    <Message ru="Вы еще не добавили ни одного друга!" en="You haven't added any friends yet!" es="¡Aún no has agregado ningún amigo!"/>
+    <Message ru="Вот список добавленных друзей:" en="Here is a list of added friends:" es="Aquí hay una lista de amigos agregados:"/>
     <!-- date -->
     <Message ru="Введите интервал даты рождения" en="Enter the date of birth interval" es="Introduzca el intervalo de fecha de nacimiento"/>
     <Message ru="Введите год даты рождения" en="Enter the year of birth" es="Introduzca el año de la fecha de nacimiento"/>

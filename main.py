@@ -17,12 +17,12 @@ def index():
     return HEROKU_APP_URL
 
 
-@server.route("/" + BOT_TOKEN, methods=["POST"])
+@server.route("/" + BOT_TOKEN, methods=[METHOD_POST])
 def web_hook():
     update = Update.de_json(request.get_json(force=True), bot.get_bot())
     bot.get_dispatcher().process_update(update)
     bot.get_update_queue().put(update)
-    return "OK"
+    return FLASK_SERVER_OK
 
 
 if __name__ == "__main__":
@@ -54,6 +54,6 @@ if __name__ == "__main__":
         bot = Bot(logger=logger, postgres=postgres)
         bot.start_pooling()
     server.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5000))
+        host=FLASK_SERVER_ADDRESS_VALUE,
+        port=int(os.environ.get(FLASK_SERVER_PORT, FLASK_SERVER_PORT_VALUE))
     )
