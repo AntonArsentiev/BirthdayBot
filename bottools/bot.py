@@ -582,7 +582,7 @@ class Bot:
             birthday[FIO][LAST_NAME] = last_name if last_name and len(last_name) > 0 else NONE
             birthday[FIO][FIRST_NAME] = first_name if first_name and len(first_name) > 0 else NONE
             birthday[PHONE_NUMBER] = phone_number if phone_number and len(phone_number) > 0 else NONE
-            birthday[TELEGRAM_USER_ID] = user_id if user_id else NONE
+            birthday[TELEGRAM_USER_ID] = user_id if user_id else 0
             self._status[account_id][STATUS] = ADD_DATE_INTERVAL
             start_year = 1930
             keyboard = [
