@@ -27,6 +27,25 @@ class Translator:
 
 
 if __name__ == "__main__":
-    translator = Translator()
-    print(translator.translate(message="ФИО", language="en"))
-    print(translator.languages())
+    # translator = Translator()
+    # print(translator.translate(message="ФИО", language="en"))
+    # print(translator.languages())
+
+    import json
+    dicty_1 = {
+        'anton': 1,
+        'egor': [
+            1, 2, 3
+        ],
+        'vitya': {
+            'name': 'victor',
+            'familia': 'gordeev'
+        }
+    }
+    print(dicty_1)
+    js_str = json.dumps(dicty_1)
+    print(js_str)
+    dicty_2 = json.loads(js_str)
+    print(dicty_2)
+    print(dicty_2['vitya'])
+

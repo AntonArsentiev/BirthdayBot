@@ -14,6 +14,7 @@ from datetime import (
 )
 from queue import Queue
 import calendar
+import json
 
 
 class Bot:
@@ -28,7 +29,7 @@ class Bot:
         self._dispatcher = Dispatcher(self._bot, self._update_queue, use_context=True)
         self._translator = Translator(file=TRANSLATION_FILE)
         self._set_commands()
-        self._update_status()
+        self._load_status()
         self._set_job_queue()
 
 # ------------------------------------------------------------------------------------------
@@ -51,15 +52,12 @@ class Bot:
         # self._updater.dispatcher.add_handler(CallbackQueryHandler(self._callback_query))
         # self._updater.dispatcher.add_handler(MessageHandler(Filters.all, self._other_messages))
 
-    def _update_status(self):
+    def _load_status(self):
         command = self._postgres.commands().select_account()
         records = self._postgres.execute(command)
         if self._correct_postgres_answer(records):
             for record in records:
-                self._status[record[0]] = {
-                    STATUS: NONE,
-                    LANGUAGE: record[4]
-                }
+                self._status[record[0]] = json.loads(record[5])
 
     def _set_job_queue(self):
         self._job_queue.set_dispatcher(self._dispatcher)
@@ -83,12 +81,15 @@ class Bot:
         self._bot.setWebhook(HEROKU_APP_URL + BOT_TOKEN)
 
     def get_dispatcher(self):
+        # pass
         return self._dispatcher
 
     def get_update_queue(self):
+        # pass
         return self._update_queue
 
     def get_bot(self):
+        # pass
         return self._bot
 
 # ------------------------------------------------------------------------------------------
@@ -106,13 +107,18 @@ class Bot:
                 text=translate("Я рад снова тебя приветствовать здесь!", language)
             )
         else:
-            self._status[account_id] = {LANGUAGE: STANDARD_LANGUAGE, STATUS: NONE}
+            self._status[account_id] = {
+                LANGUAGE: STANDARD_LANGUAGE,
+                STATUS: NONE,
+                BIRTHDAY: {}
+            }
             command = self._postgres.commands().insert_account(
                 account_id=account_id,
                 first_name=update.effective_user[FIRST_NAME],
                 last_name=update.effective_user[LAST_NAME],
                 user_name=update.effective_user[USERNAME],
-                language_code=STANDARD_LANGUAGE
+                language_code=STANDARD_LANGUAGE,
+                status=json.dumps(self._status[account_id])
             )
             self._postgres.execute(command)
             context.bot.send_message(
@@ -123,6 +129,7 @@ class Bot:
                 chat_id=update.effective_message.chat_id,
                 text=translate("Чтобы вы лучше понимали что я могу, воспользуйтесь командой /help. Если у вас есть желание сменить язык общения, то команда /language поможет вам это сделать!", language)
             )
+        self._update_status(account_id)
 
     def _add(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -150,6 +157,7 @@ class Bot:
             chat_id=update.effective_message.chat_id,
             text=translate("Давайте начнем заполнение анкеты вашего друга. Сперва пришлите контакт друга", language)
         )
+        self._update_status(account_id)
 
     def _friends(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -175,6 +183,7 @@ class Bot:
                 chat_id=update.message.chat_id,
                 text=translate("Вы еще не добавили ни одного друга!", language)
             )
+        self._update_status(account_id)
 
     def _language(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -194,6 +203,7 @@ class Bot:
             text=translate("Сейчас установленный язык русский. На какой Вы желаете изменить?", language),
             reply_markup=reply_markup
         )
+        self._update_status(account_id)
 
     def _help(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -209,6 +219,7 @@ class Bot:
                            "Для заполнения анкеты существует команда /add\\n\\n"
                            "При необходимости сменить язык общения - можно отправить команду /language", language)
         )
+        self._update_status(account_id)
 
     def _callback_query(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -378,6 +389,7 @@ class Bot:
             reply_markup=reply_markup,
             parse_mode=ParseMode.HTML
         )
+        self._update_status(account_id)
 
     def _it_is_time_for_birthday_after_create(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -417,6 +429,10 @@ class Bot:
         command = self._postgres.commands().update_remind(remind7, remind1, account_id)
         self._postgres.execute(command)
 
+    def _update_status(self, account_id):
+        command = self._postgres.commands().update_status(json.dumps(self._status[account_id]), account_id)
+        self._postgres.execute(command)
+
 # ------------------------------------------------------------------------------------------
 #       CALLBACK QUERY METHODS
 # ------------------------------------------------------------------------------------------
@@ -438,6 +454,7 @@ class Bot:
             message_id=update.callback_query.message.message_id,
             text=translate("Вы изменили язык на русский!", language)
         )
+        self._update_status(account_id)
 
     def _add_fio_in_callback_query(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -448,6 +465,7 @@ class Bot:
             chat_id=update.callback_query.message.chat_id,
             text=translate("Введите фамилию друга", language)
         )
+        self._update_status(account_id)
 
     def _add_date_in_callback_query(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -470,6 +488,7 @@ class Bot:
                 resize_keyboard=True
             )
         )
+        self._update_status(account_id)
 
     def _add_congratulation_in_callback_query(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -480,6 +499,7 @@ class Bot:
             chat_id=update.callback_query.message.chat_id,
             text=translate("Введите поздравление для друга", language)
         )
+        self._update_status(account_id)
 
     def _add_desires_in_callback_query(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -491,6 +511,7 @@ class Bot:
             message_id=update.callback_query.message.message_id,
             text=translate("Введите желания друга", language)
         )
+        self._update_status(account_id)
 
     def _create_in_callback_query(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -523,6 +544,7 @@ class Bot:
         self._it_is_time_for_birthday_after_create(update, context)
         self._status[account_id][STATUS] = NONE
         self._status[account_id][BIRTHDAY] = {}
+        self._update_status(account_id)
 
     def _invalid_in_callback_query(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -570,8 +592,11 @@ class Bot:
                 )
             )
         else:
-            context.bot.send_message(chat_id=update.effective_message.chat_id,
-                                     text="Будьте так любезны, пришлите мне контакт именинника!")
+            context.bot.send_message(
+                chat_id=update.effective_message.chat_id,
+                text=translate("Будьте так любезны, пришлите мне контакт именинника!", language)
+            )
+        self._update_status(account_id)
 
     def _add_date_interval_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -593,6 +618,7 @@ class Bot:
                 resize_keyboard=True
             )
         )
+        self._update_status(account_id)
 
     def _add_date_year_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -618,6 +644,7 @@ class Bot:
                 resize_keyboard=True
             )
         )
+        self._update_status(account_id)
 
     def _add_date_month_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -642,11 +669,13 @@ class Bot:
                 resize_keyboard=True
             )
         )
+        self._update_status(account_id)
 
     def _add_date_day_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
         self._status[account_id][BIRTHDAY][DATE][DAY] = update.effective_message.text
         self._send_create_message(update, context)
+        self._update_status(account_id)
 
     def _add_fio_last_name_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -664,6 +693,7 @@ class Bot:
                 chat_id=update.effective_message.chat_id,
                 text=translate("Будьте так любезны, введите фамилию друга", language)
             )
+        self._update_status(account_id)
 
     def _add_fio_first_name_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -681,6 +711,7 @@ class Bot:
                 chat_id=update.effective_message.chat_id,
                 text=translate("Будьте так любезны, введите имя друга", language)
             )
+        self._update_status(account_id)
 
     def _add_fio_middle_name_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -694,6 +725,7 @@ class Bot:
                 chat_id=update.effective_message.chat_id,
                 text=translate("Будьте так любезны, введите отчество друга", language)
             )
+        self._update_status(account_id)
 
     def _add_congratulation_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -707,6 +739,7 @@ class Bot:
                 chat_id=update.effective_message.chat_id,
                 text=translate("Будьте так любезны, пришлите мне поздравление для именинника!", language)
             )
+        self._update_status(account_id)
 
     def _add_desires_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -720,6 +753,7 @@ class Bot:
                 chat_id=update.effective_message.chat_id,
                 text=translate("Будьте так любезны, пришлите мне пожелания к подарку для именинника!", language)
             )
+        self._update_status(account_id)
 
     def _invalid_in_other_messages(self, update, context):
         account_id = update.effective_user[ACCOUNT_ID]
@@ -755,6 +789,7 @@ class Bot:
             self._successful_payment_in_other_messages(update, context)
         else:
             self._unprocessed_other_messages(update, context)
+        self._update_status(account_id)
 
 # ------------------------------------------------------------------------------------------
 #       ATTACHMENT METHODS

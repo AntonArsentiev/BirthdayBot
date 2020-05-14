@@ -40,7 +40,8 @@
     <Message ru="октябрь" en="october" es="octubre"/>
     <Message ru="ноябрь" en="november" es="noviembre"/>
     <Message ru="декабрь" en="december" es="diciembre"/>
-    <!-- fio, congratulation, desires -->
+    <!-- contact, fio, congratulation, desires -->
+    <Message ru="Будьте так любезны, пришлите мне контакт именинника!" en="Please send me the birthday friend's contact information!" es="¡Por favor, envíeme el contacto del cumpleañero!"/>
     <Message ru="Введите фамилию друга" en="Enter your friend's last name" es="Escriba el apellido de un amigo"/>
     <Message ru="Введите имя друга" en="Enter your friend's name" es="Escriba el nombre de un amigo"/>
     <Message ru="Введите отчество друга" en="Enter your friend's middle name" es="Introduzca el segundo nombre de un amigo"/>

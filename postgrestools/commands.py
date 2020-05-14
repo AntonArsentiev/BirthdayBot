@@ -62,6 +62,7 @@ CREATE_ACCOUNT_TABLE = """
         last_name character varying(64),
         user_name character varying(64),
         language_code character varying(4),
+        status text,
         CONSTRAINT account_account_id_pk PRIMARY KEY (account_id)
     );
     
@@ -176,13 +177,21 @@ SELECT_ACCOUNT = """
     SELECT * FROM "Account";
 """
 
+SELECT_STATUS = """
+    SELECT status FROM "Account" WHERE account_id = {account_id};
+"""
+
 INSERT_ACCOUNT = """
-    INSERT INTO "Account" (account_id, first_name, last_name, user_name, language_code) 
-    VALUES ({account_id}, '{first_name}', '{last_name}', '{user_name}', '{language_code}');
+    INSERT INTO "Account" (account_id, first_name, last_name, user_name, language_code, status) 
+    VALUES ({account_id}, '{first_name}', '{last_name}', '{user_name}', '{language_code}', '{status}');
 """
 
 UPDATE_LANGUAGE = """
     UPDATE "Account" SET language_code = '{language_code}' WHERE account_id = {account_id};
+"""
+
+UPDATE_STATUS = """
+    UPDATE "Account" SET status = '{status}' WHERE account_id = {account_id};
 """
 
 INSERT_BIRTHDAY = """
@@ -222,19 +231,31 @@ class Commands:
         return SELECT_ACCOUNT
 
     @staticmethod
-    def insert_account(account_id, first_name, last_name, user_name, language_code):
+    def select_status():
+        return SELECT_STATUS
+
+    @staticmethod
+    def insert_account(account_id, first_name, last_name, user_name, language_code, status):
         return INSERT_ACCOUNT.format(
             account_id=account_id,
             first_name=first_name,
             last_name=last_name,
             user_name=user_name,
-            language_code=language_code
+            language_code=language_code,
+            status=status
         )
 
     @staticmethod
     def update_language(language_code, account_id):
         return UPDATE_LANGUAGE.format(
             language_code=language_code,
+            account_id=account_id
+        )
+
+    @staticmethod
+    def update_status(status, account_id):
+        return UPDATE_STATUS.format(
+            status=status,
             account_id=account_id
         )
 
@@ -268,18 +289,3 @@ class Commands:
             remind1=remind1,
             account_id=account_id
         )
-
-
-def main():
-    command = INSERT_ACCOUNT.format(
-        account_id="12345",
-        first_name="anton",
-        last_name="arsentiev",
-        user_name="antoinearsentiev",
-        language_code="en"
-    )
-    print(command)
-
-
-if __name__ == "__main__":
-    main()
