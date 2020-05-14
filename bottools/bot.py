@@ -424,10 +424,15 @@ class Bot:
         elif datetime_birthday.timestamp() - datetime.utcnow().timestamp() <= 7 * 24 * 60 * 60:
             context.bot.send_message(
                 chat_id=update.callback_query.message.chat_id,
-                text=translate("У твоего друга менее чем через неделю день рождения!\\n\\n"
-                               "Приготовь хороший подарок, надеюсь ты знаешь что бы он хотел! "
-                               "Не забудь поздравить именинника и постарайся "
-                               "сделать его день рождения незабываемым!", language)
+                text=translate(
+                    "У твоего друга менее чем через неделю день рождения!\\n\\n"
+                    "{fio} исполнится {age}!\\n\\n" 
+                    "Приготовь хороший подарок, надеюсь ты знаешь что бы он хотел! "
+                    "Не забудь поздравить именинника и постарайся "
+                    "сделать его день рождения незабываемым!", language).format(
+                    fio=str(" ".join(birthday[FIO].values())).strip(),
+                    age=str(datetime.utcnow().year - int(birthday[DATE][YEAR])),
+                )
             )
             remind7 = False
         command = self._postgres.commands().update_remind(remind7, remind1, account_id)
