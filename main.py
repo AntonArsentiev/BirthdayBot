@@ -46,7 +46,7 @@ if __name__ == "__main__":
         database=commands.DATABASE_APP_VALUE,
         user=commands.USER_APP_VALUE,
         password=commands.PASSWORD_APP_VALUE,
-        connection_type=commands.CONNECTION_TYPE_CONNECT,
+        connection_type=commands.CONNECTION_TYPE_DROP_AND_CREATE,
         logger=logger
     )
 
