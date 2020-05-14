@@ -27,25 +27,29 @@ class Translator:
 
 
 if __name__ == "__main__":
-    # translator = Translator()
-    # print(translator.translate(message="ФИО", language="en"))
+    translator = Translator()
+    print(translator.translate(message="У твоего друга менее чем через неделю день рождения!\\n\\n"
+                                       "{fio} исполнится {age}!\\n\\n" 
+                                       "Приготовь хороший подарок, надеюсь ты знаешь что бы он хотел! "
+                                       "Не забудь поздравить именинника и постарайся "
+                                       "сделать его день рождения незабываемым!", language="en"))
     # print(translator.languages())
 
-    import json
-    dicty_1 = {
-        'anton': 1,
-        'egor': [
-            1, 2, 3
-        ],
-        'vitya': {
-            'name': 'victor',
-            'familia': 'gordeev'
-        }
-    }
-    print(dicty_1)
-    js_str = json.dumps(dicty_1)
-    print(js_str)
-    dicty_2 = json.loads(js_str)
-    print(dicty_2)
-    print(dicty_2['vitya'])
+    # import json
+    # dicty_1 = {
+    #     'anton': 1,
+    #     'egor': [
+    #         1, 2, 3
+    #     ],
+    #     'vitya': {
+    #         'name': 'victor',
+    #         'familia': 'gordeev'
+    #     }
+    # }
+    # print(dicty_1)
+    # js_str = json.dumps(dicty_1)
+    # print(js_str)
+    # dicty_2 = json.loads(js_str)
+    # print(dicty_2)
+    # print(dicty_2['vitya'])
 

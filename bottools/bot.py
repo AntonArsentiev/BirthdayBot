@@ -324,7 +324,10 @@ class Bot:
                                     "{fio} исполнится {age}!\\n\\n" 
                                     "Приготовь хороший подарок, надеюсь ты знаешь что бы он хотел! "
                                     "Не забудь поздравить именинника и постарайся "
-                                    "сделать его день рождения незабываемым!", language)
+                                    "сделать его день рождения незабываемым!", language).format(
+                                    fio=str(" ".join(birthday[FIO].values())).strip(),
+                                    age=str(datetime.utcnow().year - int(birthday[DATE][YEAR])),
+                                )
                             )
                             remind7, remind1 = False, True
                         command = self._postgres.commands().update_remind(remind7, remind1, account_id)
