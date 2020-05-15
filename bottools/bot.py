@@ -66,11 +66,9 @@ class Bot:
         to = to.replace(hour=0, minute=0, second=0, microsecond=0)
         self._job_queue.run_repeating(
             self._it_is_time_for_birthday,
-            interval=2 * 60,
-            first=1 * 60
+            interval=24 * 60 * 60,
+            first=to.timestamp() - now.timestamp()
         )
-        # interval = 24 * 60 * 60,
-        # first = to.timestamp() - now.timestamp()
         self._job_queue.start()
 
 # ------------------------------------------------------------------------------------------
@@ -334,7 +332,7 @@ class Bot:
                                 )
                             )
                             remind7, remind1 = False, True
-                        command = self._postgres.commands().update_remind(remind7, remind1, account_id)
+                        command = self._postgres.commands().update_remind(remind7, remind1, birthday_record[0])
                         self._postgres.execute(command)
 
 # ------------------------------------------------------------------------------------------
@@ -439,8 +437,16 @@ class Bot:
                 )
             )
             remind7 = False
-        command = self._postgres.commands().update_remind(remind7, remind1, account_id)
-        self._postgres.execute(command)
+        command = self._postgres.commands().select_specific_birthday(
+            account_id=account_id,
+            first_name=birthday[FIO][FIRST_NAME],
+            last_name=birthday[FIO][LAST_NAME],
+            middle_name=birthday[FIO][MIDDLE_NAME]
+        )
+        specific_birthday = self._postgres.execute(command)
+        if self._correct_postgres_answer(specific_birthday):
+            command = self._postgres.commands().update_remind(remind7, remind1, specific_birthday[0][0])
+            self._postgres.execute(command)
 
     def _update_status(self, account_id):
         command = self._postgres.commands().update_status(json.dumps(self._status[account_id]), account_id)

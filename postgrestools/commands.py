@@ -203,8 +203,12 @@ SELECT_BIRTHDAY_FOR_ACCOUNT = """
     SELECT * FROM "Birthday" WHERE account_id = {account_id};  
 """
 
+SELECT_SPECIFIC_BIRTHDAY = """
+    SELECT * FROM "Birthday" WHERE account_id = {account_id} AND first_name = '{first_name}' AND last_name = '{last_name}' AND middle_name = '{middle_name}';  
+"""
+
 UPDATE_REMIND = """
-    UPDATE "Birthday" SET remind7 = '{remind7}', remind1 = '{remind1}' WHERE account_id = {account_id};
+    UPDATE "Birthday" SET remind7 = '{remind7}', remind1 = '{remind1}' WHERE id = {birthday_id};
 """
 
 
@@ -283,9 +287,18 @@ class Commands:
         )
 
     @staticmethod
-    def update_remind(remind7, remind1, account_id):
+    def select_specific_birthday(account_id, first_name, last_name, middle_name):
+        return SELECT_SPECIFIC_BIRTHDAY.format(
+            account_id=account_id,
+            first_name=first_name,
+            last_name=last_name,
+            middle_name=middle_name
+        )
+
+    @staticmethod
+    def update_remind(remind7, remind1, birthday_id):
         return UPDATE_REMIND.format(
             remind7=remind7,
             remind1=remind1,
-            account_id=account_id
+            birthday_id=birthday_id
         )
