@@ -66,9 +66,11 @@ class Bot:
         to = to.replace(hour=0, minute=0, second=0, microsecond=0)
         self._job_queue.run_repeating(
             self._it_is_time_for_birthday,
-            interval=24 * 60 * 60,
-            first=to.timestamp() - now.timestamp()
+            interval=2 * 60,
+            first=1 * 60
         )
+        # interval = 24 * 60 * 60,
+        # first = to.timestamp() - now.timestamp()
         self._job_queue.start()
 
 # ------------------------------------------------------------------------------------------
@@ -274,6 +276,8 @@ class Bot:
 # ------------------------------------------------------------------------------------------
 
     def _it_is_time_for_birthday(self, dispatcher):
+        self._logger.info("_it_is_time_for_birthday", "i am here")
+
         account_command = self._postgres.commands().select_account()
         account_records = self._postgres.execute(account_command)
         translate = self._translator.translate
