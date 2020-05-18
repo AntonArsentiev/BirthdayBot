@@ -63,7 +63,7 @@ class Bot:
         self._job_queue.set_dispatcher(self._dispatcher)
         now = datetime.utcnow()
         to = now + timedelta(seconds=23 * 60 * 60)
-        to = to.replace(hour=0, minute=0, second=0, microsecond=0)
+        to = to.replace(hour=0, minute=0, second=30, microsecond=0)
         self._job_queue.run_repeating(
             self._it_is_time_for_birthday,
             interval=24 * 60 * 60,
@@ -232,7 +232,7 @@ class Bot:
             if query_data == ADD_FIO:
                 self._add_fio_in_callback_query(update, context)
             elif query_data == ADD_DATE:
-                self._add_date_in_callback_query(update,context)
+                self._add_date_in_callback_query(update, context)
             elif query_data == ADD_CONGRATULATION:
                 self._add_congratulation_in_callback_query(update, context)
             elif query_data == ADD_DESIRES:
