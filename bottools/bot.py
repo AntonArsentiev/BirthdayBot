@@ -62,7 +62,7 @@ class Bot:
     def _set_job_queue(self):
         self._job_queue.set_dispatcher(self._dispatcher)
         now = datetime.utcnow()
-        to = now + timedelta(seconds=23 * 60 * 60)
+        to = now + timedelta(seconds=24 * 60 * 60)
         to = to.replace(hour=0, minute=0, second=30, microsecond=0)
         self._job_queue.run_repeating(
             self._it_is_time_for_birthday,
